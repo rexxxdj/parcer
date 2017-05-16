@@ -20,7 +20,7 @@ class ycombinatorParser():
     def parsePage(parsed_body,outputfile,rownumber):
 
         def jsonWriteLine(rownumber,title,autor,url,site):
-            line = '{"Rownumber:" %d,\n "title": "%s",\n "autor:" "%s",\n "url": "%s",\n "site": "%s",\n }\n' %(rownumber,title,autor,url,site)
+            line = u'{"Rownumber:" %d,\n "title": "%s",\n "autor:" "%s",\n "url": "%s",\n "site": "%s",\n }\n' %(rownumber,title,autor,url,site)
             return line
 
         def getNews(rownews):
@@ -62,6 +62,8 @@ class ycombinatorParser():
                         print (ruwnumber,'PARSE ME!')              
                     outputfile.write(jsonWriteLine(rownumber,title,autor,url,site))                
                     rownumber += 1
+                    if rownumber>100:
+                        exit()
         return rownumber
 
 
@@ -74,22 +76,18 @@ class ycombinatorParser():
     while pageflag:        
         print ("Parsing: ", pageparse)
         response = requests.get(pageparse)
-        parsed_body = html.fromstring(response.text)    
-        
+        parsed_body = html.fromstring(response.text)       
 
         rownumber = parsePage(parsed_body,filename,rownumber)-1
 
-
         pageparse = siteurl+getNextPage(pageparse)
-
         if pageparse == siteurl:
             pageflag = False
-
 
     filename.close()
 
 
 
 
-if __name__ == 'main':
+if __name__ == '__main__':
     ycombinatorParser()        
